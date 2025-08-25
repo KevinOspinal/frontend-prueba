@@ -5,6 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { FiSave, FiX } from "react-icons/fi";
 
+// 👇 Importamos las funciones centralizadas
+import { getMarca, updateMarca } from "@/app/lib/api";
+
 export default function EditarMarcaPage() {
   const router = useRouter();
   const params = useParams();
@@ -19,13 +22,11 @@ export default function EditarMarcaPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Cargar datos de la marca
+  // 🔹 Cargar datos de la marca
   useEffect(() => {
     const fetchMarca = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/marcas/${id}`);
-        if (!res.ok) throw new Error("Error al obtener la marca");
-        const data = await res.json();
+        const data = await getMarca(id);
         setMarca({
           nombre: data.nombre,
           titular: data.titular,
@@ -44,19 +45,13 @@ export default function EditarMarcaPage() {
     if (id) fetchMarca();
   }, [id, router]);
 
-  // Guardar cambios
+  // 🔹 Guardar cambios
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/marcas/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(marca),
-      });
-      if (!res.ok) throw new Error("Error al actualizar la marca");
-
+      await updateMarca(id, marca);
       toast.success("✅ Marca actualizada correctamente");
       router.push("/marcas");
     } catch (err) {
@@ -67,7 +62,7 @@ export default function EditarMarcaPage() {
     }
   };
 
-  // Skeleton Loader
+  // 🔹 Skeleton Loader
   if (loading) {
     return (
       <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 animate-pulse">
@@ -86,6 +81,7 @@ export default function EditarMarcaPage() {
     );
   }
 
+  // 🔹 Formulario
   return (
     <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">

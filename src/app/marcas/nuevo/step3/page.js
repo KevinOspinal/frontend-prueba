@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+// 👇 Importamos la API centralizada
+import { createMarca } from "@/app/lib/api";
+
 export default function Step3() {
   const router = useRouter();
   const [nombre, setNombre] = useState("");
@@ -29,23 +32,21 @@ export default function Step3() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/marcas/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nombre,
-          titular,
-          estado,
-          descripcion: descripcion || null,
-        }),
+      // 🔹 Usamos createMarca en lugar de fetch directo
+      await createMarca({
+        nombre,
+        titular,
+        estado,
+        descripcion: descripcion || null,
       });
 
-      if (!res.ok) throw new Error("Error al registrar la marca");
-
       toast.success("✅ Marca registrada exitosamente");
+
+      // limpiar storage temporal del formulario
       localStorage.removeItem("marca_nombre");
       localStorage.removeItem("marca_titular");
       localStorage.removeItem("marca_estado");
+
       router.push("/marcas");
     } catch (err) {
       console.error(err);

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FiEdit, FiTrash2, FiPlusCircle } from "react-icons/fi";
+import { getMarcas, deleteMarca } from "@/app/lib/api";
 
 export default function MarcasPage() {
   const router = useRouter();
@@ -16,10 +17,10 @@ export default function MarcasPage() {
   // Cargar marcas desde el backend
   const fetchMarcas = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/marcas/");
-      const data = await response.json();
+      const data = await getMarcas(); // 👈 reemplazado
       setMarcas(data);
     } catch (err) {
+      console.error(err);
       toast.error("❌ Error al cargar las marcas");
     } finally {
       setLoading(false);
@@ -42,14 +43,11 @@ export default function MarcasPage() {
     setDeletingId(marcaToDelete);
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/marcas/${marcaToDelete}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Error al eliminar marca");
-
+      await deleteMarca(marcaToDelete); // 👈 usamos función centralizada
       setMarcas(marcas.filter((m) => m.id !== marcaToDelete));
       toast.success("✅ Marca eliminada correctamente");
     } catch (err) {
+      console.error(err);
       toast.error("❌ Hubo un error al eliminar la marca");
     } finally {
       setDeletingId(null);
