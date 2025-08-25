@@ -1,5 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -15,7 +16,7 @@ export default function Sidebar() {
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.href}>
-            <a
+            <Link
               href={link.href}
               className={`block px-3 py-2 rounded-md ${
                 pathname === link.href
@@ -24,7 +25,7 @@ export default function Sidebar() {
               }`}
             >
               {link.name}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
