@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { FiSave, FiX } from "react-icons/fi";
 
-// 👇 Importamos las funciones centralizadas
+//Importamos las funciones centralizadas
 import { getMarca, updateMarca } from "@/app/lib/api";
 
 export default function EditarMarcaPage() {

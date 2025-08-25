@@ -9,7 +9,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Hero limpio en blanco */}
       <section className="relative bg-white text-gray-800 py-20 px-6 overflow-hidden border-b shadow-sm">
         <div className="relative max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-6">
